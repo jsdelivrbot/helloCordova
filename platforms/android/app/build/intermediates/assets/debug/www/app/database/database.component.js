@@ -11,10 +11,79 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var DatabaseComponent = (function () {
     function DatabaseComponent() {
+        this.database = null;
+        this.nextUser = 101;
     }
+    DatabaseComponent.prototype.initDatabase = function () {
+        this.database = window.sqlitePlugin.openDatabase({ name: 'sample.db', location: 'default' });
+        this.database.transaction(function (transaction) {
+            transaction.executeSql('CREATE TABLE SampleTable (name, score)');
+        });
+    };
+    DatabaseComponent.prototype.echoTest = function () {
+        window.sqlitePlugin.echoTest(function () {
+            console.debug('Echo test OK');
+        }, function (error) {
+            console.debug('Echo test ERROR: ' + error);
+        });
+    };
+    DatabaseComponent.prototype.selfTest = function () {
+        window.sqlitePlugin.selfTest(function () {
+            console.debug('Self test OK');
+        }, function (error) {
+            console.debug('Self test ERROR: ' + error);
+        });
+    };
+    DatabaseComponent.prototype.stringTest1 = function () {
+        this.database.transaction(function (transaction) {
+            transaction.executeSql("SELECT upper('Test string') AS upperText", [], function (ignored, resultSet) {
+                console.debug('Got upperText result (ALL CAPS): ' + resultSet.rows.item(0).upperText);
+            });
+        }, function (error) {
+            console.debug('SELECT count error: ' + error);
+        });
+    };
+    DatabaseComponent.prototype.stringTest2 = function () {
+        this.database.transaction(function (transaction) {
+            transaction.executeSql('SELECT upper(?) AS upperText', ['Test string'], function (ignored, resultSet) {
+                console.debug('Got upperText result (ALL CAPS): ' + resultSet.rows.item(0).upperText);
+            });
+        }, function (error) {
+            console.debug('SELECT count error: ' + error);
+        });
+    };
+    DatabaseComponent.prototype.showCount = function () {
+        this.database.transaction(function (transaction) {
+            transaction.executeSql('SELECT count(*) AS recordCount FROM SampleTable', [], function (ignored, resultSet) {
+                console.debug('RECORD COUNT: ' + resultSet.rows.item(0).recordCount);
+            });
+        }, function (error) {
+            console.debug('SELECT count error: ' + error);
+        });
+    };
+    DatabaseComponent.prototype.addRecord = function () {
+        this.database.transaction(function (transaction) {
+            transaction.executeSql('INSERT INTO SampleTable VALUES (?,?)', ['User ' + this.nextUser, this.nextUser]);
+        }, function (error) {
+            console.debug('INSERT error: ' + error);
+        }, function () {
+            console.debug('INSERT OK');
+            ++this.nextUser;
+        });
+    };
+    DatabaseComponent.prototype.deleteRecords = function () {
+        this.database.transaction(function (transaction) {
+            transaction.executeSql('DELETE FROM SampleTable');
+        }, function (error) {
+            console.debug('DELETE error: ' + error);
+        }, function () {
+            console.debug('DELETE OK');
+            ++this.nextUser;
+        });
+    };
     DatabaseComponent = __decorate([
         core_1.Component({
-            template: "\n    <h5>Database Component</h5>\n    "
+            template: "\n    <h5>Database Component</h5>\n    <div class=\"page-header\">\n    <h3>Cordova SQL test</h3>\n    </div>\n    <div class=\"btn-group-vertical\">\n        <button (click)=\"echoTest()\">Run echo test</button> <br/>\n        <button (click)=\"selfTest()\">Run self test</button> <br/>\n        <button (click)=\"initDatabase()\">Initialize Database</button> <br/>\n        <button (click)=\"stringTest1()\">Run string test 1</button> <br/>\n        <button (click)=\"stringTest2()\">Run string test 2</button> <br/>\n        <button (click)=\"showCount()\">Show record count</button> <br/>\n        <button (click)=\"addRecord()\">INSERT a new record</button> <br/>\n        <button (click)=\"deleteRecords()\">Delete all records</button> <br/>\n    </div>\n    "
         }), 
         __metadata('design:paramtypes', [])
     ], DatabaseComponent);
