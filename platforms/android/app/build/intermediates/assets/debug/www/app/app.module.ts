@@ -8,6 +8,8 @@ import { routing } from './app.routing';
 import { AppComponent } from './app.component';
 import { AboutComponent } from './about/about.component';
 import { DeviceComponent } from './device/device.component';
+import { DatabaseComponent } from './database/database.component';
+import { ListComponent } from './list/list.component';
 
 @NgModule({
     imports: [
@@ -17,7 +19,9 @@ import { DeviceComponent } from './device/device.component';
     declarations: [
         AppComponent,
         AboutComponent,
-        DeviceComponent
+        DeviceComponent,
+        DatabaseComponent,
+        ListComponent
     ],
     bootstrap: [AppComponent]
 })

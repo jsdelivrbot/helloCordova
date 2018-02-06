@@ -4,6 +4,7 @@
     "cordova-plugin-camera": "registry:dt/cordova-plugin-camera#0.0.0+20160819210047",
     "cordova-plugin-device": "registry:dt/cordova-plugin-device#0.0.0+20160919075538",
     "cordova-plugin-file": "registry:dt/cordova-plugin-file#0.0.0+20160916224823",
-    "cordova-plugin-media-capture": "registry:dt/cordova-plugin-media-capture#0.0.0+20160819210047"
+    "cordova-plugin-media-capture": "registry:dt/cordova-plugin-media-capture#0.0.0+20160819210047",
+    "cordova-sqlite-storage": "registry:dt/cordova-sqlite-storage#1.5.0+20170112212839"
   }
 }

@@ -280,6 +280,14 @@ module.exports = [
     "file": "plugins/cordova-plugin-media-capture/www/android/init.js",
     "pluginId": "cordova-plugin-media-capture",
     "runs": true
+  },
+  {
+    "id": "cordova-sqlite-storage.SQLitePlugin",
+    "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+    "pluginId": "cordova-sqlite-storage",
+    "clobbers": [
+      "SQLitePlugin"
+    ]
   }
 ];
 module.exports.metadata = 
@@ -289,7 +297,8 @@ module.exports.metadata =
   "cordova-plugin-device": "2.0.1",
   "cordova-plugin-camera": "4.0.1",
   "cordova-plugin-file": "6.0.1",
-  "cordova-plugin-media-capture": "3.0.1"
+  "cordova-plugin-media-capture": "3.0.1",
+  "cordova-sqlite-storage": "2.2.0"
 };
 // BOTTOM OF METADATA
 });

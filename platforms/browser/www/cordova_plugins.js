@@ -290,6 +290,14 @@ module.exports = [
         "id": "cordova-plugin-media-capture.CaptureProxy",
         "pluginId": "cordova-plugin-media-capture",
         "runs": true
+    },
+    {
+        "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+        "id": "cordova-sqlite-storage.SQLitePlugin",
+        "pluginId": "cordova-sqlite-storage",
+        "clobbers": [
+            "SQLitePlugin"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -299,7 +307,8 @@ module.exports.metadata =
     "cordova-plugin-device": "2.0.1",
     "cordova-plugin-camera": "4.0.1",
     "cordova-plugin-file": "6.0.1",
-    "cordova-plugin-media-capture": "3.0.1"
+    "cordova-plugin-media-capture": "3.0.1",
+    "cordova-sqlite-storage": "2.2.0"
 }
 // BOTTOM OF METADATA
 });

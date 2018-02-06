@@ -101,6 +101,7 @@ export class DeviceComponent {
             //     },
             //     {limit:2});
         }
+
         if (selection == "video"){
             navigator.device.capture.captureVideo(function captureSuccess(mediaFiles){
                 console.debug("test mediaFiles: " + mediaFiles[0].fullPath, " app");
@@ -111,5 +112,10 @@ export class DeviceComponent {
             },{limit:1});
         }
     }
+
+    // process.on('unhandledRejection', (reason, p) => {
+    //     console.log('Unhandled Rejection at:', p, 'reason:', reason);
+    //     // application specific logging, throwing an error, or other logic here
+    //   });
 
 }
