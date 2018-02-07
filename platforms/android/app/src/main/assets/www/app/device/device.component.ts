@@ -25,14 +25,28 @@ export class DeviceComponent {
     populateDeviceDetails() {
         var device:Device = (<any>window).device;
         this.deviceDetails = "";
-        this.deviceDetails += "<br/>Cordova:" + device.cordova;
-        this.deviceDetails += "<br/>model:" + device.model;
-        this.deviceDetails += "<br/>platform:" + device.platform;
-        this.deviceDetails += "<br/>uuid:" + device.uuid;
-        this.deviceDetails += "<br/>version:" + device.version;
-        this.deviceDetails += "<br/>manufacturer:" + device.manufacturer;
-        this.deviceDetails += "<br/>isVirtual:" + device.isVirtual;
-        this.deviceDetails += "<br/>serial:" + device.serial;
+        this.deviceDetails += this.populateDeviceDetailsMethod(device);
+        // this.deviceDetails += "<br/>Cordova:" + device.cordova;
+        // this.deviceDetails += "<br/>model:" + device.model;
+        // this.deviceDetails += "<br/>platform:" + device.platform;
+        // this.deviceDetails += "<br/>uuid:" + device.uuid;
+        // this.deviceDetails += "<br/>version:" + device.version;
+        // this.deviceDetails += "<br/>manufacturer:" + device.manufacturer;
+        // this.deviceDetails += "<br/>isVirtual:" + device.isVirtual;
+        // this.deviceDetails += "<br/>serial:" + device.serial;
+    }
+
+    public populateDeviceDetailsMethod(devi) {
+        var dd = "";
+        dd += "<br/>Cordova:" + devi.cordova;
+        dd += "<br/>model:" + devi.model;
+        dd += "<br/>platform:" + devi.platform;
+        dd += "<br/>uuid:" + devi.uuid;
+        dd += "<br/>version:" + devi.version;
+        dd += "<br/>manufacturer:" + devi.manufacturer;
+        dd += "<br/>isVirtual:" + devi.isVirtual;
+        dd += "<br/>serial:" + devi.serial;
+        return dd;
     }
 
     setOptions(srcType) {
@@ -112,10 +126,5 @@ export class DeviceComponent {
             },{limit:1});
         }
     }
-
-    // process.on('unhandledRejection', (reason, p) => {
-    //     console.log('Unhandled Rejection at:', p, 'reason:', reason);
-    //     // application specific logging, throwing an error, or other logic here
-    //   });
-
 }
+//export default DeviceComponent;

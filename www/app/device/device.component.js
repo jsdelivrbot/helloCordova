@@ -16,14 +16,19 @@ var DeviceComponent = (function () {
     DeviceComponent.prototype.populateDeviceDetails = function () {
         var device = window.device;
         this.deviceDetails = "";
-        this.deviceDetails += "<br/>Cordova:" + device.cordova;
-        this.deviceDetails += "<br/>model:" + device.model;
-        this.deviceDetails += "<br/>platform:" + device.platform;
-        this.deviceDetails += "<br/>uuid:" + device.uuid;
-        this.deviceDetails += "<br/>version:" + device.version;
-        this.deviceDetails += "<br/>manufacturer:" + device.manufacturer;
-        this.deviceDetails += "<br/>isVirtual:" + device.isVirtual;
-        this.deviceDetails += "<br/>serial:" + device.serial;
+        this.deviceDetails += this.populateDeviceDetailsMethod(device);
+    };
+    DeviceComponent.prototype.populateDeviceDetailsMethod = function (devi) {
+        var dd = "";
+        dd += "<br/>Cordova:" + devi.cordova;
+        dd += "<br/>model:" + devi.model;
+        dd += "<br/>platform:" + devi.platform;
+        dd += "<br/>uuid:" + devi.uuid;
+        dd += "<br/>version:" + devi.version;
+        dd += "<br/>manufacturer:" + devi.manufacturer;
+        dd += "<br/>isVirtual:" + devi.isVirtual;
+        dd += "<br/>serial:" + devi.serial;
+        return dd;
     };
     DeviceComponent.prototype.setOptions = function (srcType) {
         var options = {

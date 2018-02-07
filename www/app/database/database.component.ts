@@ -151,4 +151,6 @@ export class DatabaseComponent {
             console.log('SELECT SQL statement ERROR: ' + error.message);
           });
     }
+
+    // SELECT name FROM sqlite_master WHERE type='table' AND name='table_name'  COLLATE NOCASE;
 }
