@@ -15,7 +15,8 @@ var DatabaseComponent = (function () {
         this.nextUser = 101;
     }
     DatabaseComponent.prototype.initDatabase = function () {
-        this.database = window.sqlitePlugin.openDatabase({ name: 'sample.db', location: 'default' });
+        this.database = window.sqlitePlugin.openDatabase({ name: 'sample.db', location: 'default',
+            androidDatabaseImplementation: 2 });
         this.database.transaction(function (transaction) {
             transaction.executeSql('CREATE TABLE SampleTable (name, score)');
         });
@@ -81,9 +82,30 @@ var DatabaseComponent = (function () {
             ++this.nextUser;
         });
     };
+    DatabaseComponent.prototype.populateDatabase = function () {
+        this.database.sqlBatch([
+            'CREATE TABLE IF NOT EXISTS DemoTable (name, score)',
+            ['INSERT INTO DemoTable VALUES (?,?)', ['Alice', 101]],
+            ['INSERT INTO DemoTable VALUES (?,?)', ['Betty', 202]],
+        ], function () {
+            console.log('Populated database OK');
+        }, function (error) {
+            console.log('SQL batch ERROR: ' + error.message);
+        });
+    };
+    DatabaseComponent.prototype.selectFromDemo = function () {
+        this.database.executeSql('SELECT * FROM DemoTable', [], function (rs) {
+            for (var i = 0; i < rs.rows.length; i++) {
+                console.log('Record ' + i + ' => name: ' + rs.rows.item(i).name
+                    + ' score: ' + rs.rows.item(i).score);
+            }
+        }, function (error) {
+            console.log('SELECT SQL statement ERROR: ' + error.message);
+        });
+    };
     DatabaseComponent = __decorate([
         core_1.Component({
-            template: "\n    <h5>Database Component</h5>\n    <div class=\"page-header\">\n    <h3>Cordova SQL test</h3>\n    </div>\n    <div class=\"btn-group-vertical\">\n        <button (click)=\"echoTest()\">Run echo test</button> <br/>\n        <button (click)=\"selfTest()\">Run self test</button> <br/>\n        <button (click)=\"initDatabase()\">Initialize Database</button> <br/>\n        <button (click)=\"stringTest1()\">Run string test 1</button> <br/>\n        <button (click)=\"stringTest2()\">Run string test 2</button> <br/>\n        <button (click)=\"showCount()\">Show record count</button> <br/>\n        <button (click)=\"addRecord()\">INSERT a new record</button> <br/>\n        <button (click)=\"deleteRecords()\">Delete all records</button> <br/>\n    </div>\n    "
+            template: "\n    <h5>Database Component</h5>\n    <div class=\"page-header\">\n    <h3>Cordova SQL test</h3>\n    </div>\n    <div class=\"btn-group-vertical\">\n        <button (click)=\"echoTest()\">Run echo test</button> <br/>\n        <button (click)=\"selfTest()\">Run self test</button> <br/>\n        <button (click)=\"initDatabase()\">Initialize Database</button> <br/>\n        <button (click)=\"stringTest1()\">Run string test 1</button> <br/>\n        <button (click)=\"stringTest2()\">Run string test 2</button> <br/>\n        <button (click)=\"showCount()\">Show record count</button> <br/>\n        <button (click)=\"addRecord()\">INSERT a new record</button> <br/>\n        <button (click)=\"deleteRecords()\">Delete all records</button> <br/>\n        <button (click)=\"populateDatabase()\">populate Database</button> <br/>\n        <button (click)=\"selectFromDemo()\">select From Demo</button> <br/>\n    </div>\n    "
         }), 
         __metadata('design:paramtypes', [])
     ], DatabaseComponent);

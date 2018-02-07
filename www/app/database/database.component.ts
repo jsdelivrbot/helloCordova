@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { forEach } from '@angular/router/src/utils/collection';
 @Component({
     template: `
     <h5>Database Component</h5>
@@ -14,6 +15,8 @@ import { Component } from '@angular/core';
         <button (click)="showCount()">Show record count</button> <br/>
         <button (click)="addRecord()">INSERT a new record</button> <br/>
         <button (click)="deleteRecords()">Delete all records</button> <br/>
+        <button (click)="populateDatabase()">populate Database</button> <br/>
+        <button (click)="selectFromDemo()">select From Demo</button> <br/>
     </div>
     `
 })
@@ -23,7 +26,10 @@ export class DatabaseComponent {
     nextUser = 101;
 
     initDatabase() {
-    this.database = window.sqlitePlugin.openDatabase({name: 'sample.db', location: 'default'});
+        // WARNING: Multiple SQLite problem on Android => androidDatabaseImplementation: 2
+        // https://github.com/litehelpers/Cordova-sqlite-storage
+    this.database = window.sqlitePlugin.openDatabase({name: 'sample.db', location: 'default'
+                            , androidDatabaseImplementation: 2});
 
     this.database.transaction(function(transaction) {
         transaction.executeSql('CREATE TABLE SampleTable (name, score)');
@@ -96,5 +102,53 @@ export class DatabaseComponent {
         console.debug('DELETE OK');
         ++this.nextUser;
     });
+    }
+
+    // To populate a database using the standard transaction API
+    // populateDatabase(){
+    //     this.database.transaction(function(tx) {
+    //         tx.executeSql('CREATE TABLE IF NOT EXISTS DemoTable (name, score)');
+    //         tx.executeSql('INSERT INTO DemoTable VALUES (?,?)', ['Alice', 101]);
+    //         tx.executeSql('INSERT INTO DemoTable VALUES (?,?)', ['Betty', 202]);
+    //       }, function(error) {
+    //         console.log('Transaction ERROR: ' + error.message);
+    //       }, function() {
+    //         console.log('Populated database OK');
+    //       });
+    // }
+
+    // selectFromDemo(){
+    //     this.database.transaction(function(tx) {
+    //         tx.executeSql('SELECT count(*) AS mycount FROM DemoTable', [], function(tx, rs) {
+    //           console.log('Record count (expected to be 2): ' + rs.rows.item(0).mycount);
+    //           console.log('Record one => name: ' + rs.rows.item(0).name + ' score: ' + rs.rows.item(0).score);
+    //         }, function(tx, error) {
+    //           console.log('SELECT error: ' + error.message);
+    //         });
+    //       });
+    // }
+
+    // Using recommended API calls
+    populateDatabase(){
+        this.database.sqlBatch([
+            'CREATE TABLE IF NOT EXISTS DemoTable (name, score)',
+            [ 'INSERT INTO DemoTable VALUES (?,?)', ['Alice', 101] ],
+            [ 'INSERT INTO DemoTable VALUES (?,?)', ['Betty', 202] ],
+          ], function() {
+            console.log('Populated database OK');
+          }, function(error) {
+            console.log('SQL batch ERROR: ' + error.message);
+          });
+    }
+
+    selectFromDemo(){
+        this.database.executeSql('SELECT * FROM DemoTable', [], function(rs) {
+            for(let i=0; i<rs.rows.length; i++){
+                console.log('Record ' + i + ' => name: ' + rs.rows.item(i).name 
+                    + ' score: ' + rs.rows.item(i).score);
+            }
+          }, function(error) {
+            console.log('SELECT SQL statement ERROR: ' + error.message);
+          });
     }
 }
