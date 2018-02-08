@@ -12,38 +12,38 @@ var core_1 = require('@angular/core');
 var ListComponent = (function () {
     function ListComponent() {
         this.database = null;
-        this.captureList = "";
         this.initDatabase();
-        this.captureList += '<ul><li><h3> hello!! </h3></li></ul>';
+        this.showList(this.database);
     }
     ListComponent.prototype.displayVideo = function (fullPath) {
         document.getElementById("videoFile").getElementsByTagName("video")[0].src = fullPath;
     };
     ListComponent.prototype.mediaCapt = function (selection) {
         var funcVid = this.displayVideo;
-        var funcVid1 = this.addRecords;
-        var funcVid2 = this.showList;
+        var funcAddRecords = this.addRecords;
+        var funcShowList = this.showList;
         var db = this.database;
-        var cl = this.captureList;
         if (selection == "image") {
             navigator.device.capture.captureImage(function captureSuccess(mediaFiles) {
-                var i, path, len, name;
+                var i, len;
                 for (i = 0, len = mediaFiles.length; i < len; i += 1) {
-                    path = mediaFiles[i].fullPath;
-                    name = mediaFiles[i].name;
-                    funcVid1(mediaFiles[i], 'video', false, db);
+                    funcAddRecords(mediaFiles[i], 'image', false, db);
                 }
+                funcShowList(db);
             }, function captureError(error) {
                 console.debug("Unable to obtain picture: " + error, "app");
-            }, { limit: 1 });
+            }, { limit: 2 });
         }
         if (selection == "video") {
             navigator.device.capture.captureVideo(function captureSuccess(mediaFiles) {
-                console.debug("test mediaFiles: " + mediaFiles[0].fullPath, " app");
-                funcVid(mediaFiles[0].fullPath);
+                var i, len;
+                for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+                    funcAddRecords(mediaFiles[i], 'video', false, db);
+                }
+                funcShowList(db);
             }, function captureError(error) {
                 console.debug("Unable to obtain picture: " + error, "app");
-            }, { limit: 1 });
+            }, { limit: 2 });
         }
     };
     ListComponent.prototype.initDatabase = function () {
@@ -87,19 +87,24 @@ var ListComponent = (function () {
             console.log('SELECT SQL statement ERROR: ' + error.message);
         });
     };
-    ListComponent.prototype.showList = function (cl, db) {
+    ListComponent.prototype.showList = function (db) {
+        var cl = "";
         db.executeSql('SELECT * FROM MediaList', [], function (rs) {
             cl += "<ul>";
-            cl += '<li><h3> hello!! </h3></li>';
+            for (var i = 0; i < rs.rows.length; i++) {
+                cl += '<li><div>' + rs.rows.item(i).name
+                    + ' [' + rs.rows.item(i).type + ']';
+                cl += '<a routerLink="/database" routerLinkActive="active"> | View</a>' + '</div></li>';
+            }
             cl += '</ul>';
+            document.getElementById("captureList").innerHTML = cl;
         }, function (error) {
             console.log('SELECT SQL statement ERROR: ' + error.message);
         });
-        return cl;
     };
     ListComponent = __decorate([
         core_1.Component({
-            template: "\n    <h5>List Component</h5>\n\n    <div><button (click)=\"mediaCapt('image')\">Media Capture Image</button><br/></div><br/>\n    <div><button (click)=\"mediaCapt('video')\">Media Capture Video</button><br/></div><br/>\n    \n    <div></div><br/>\n    <div [innerHTML]=\"captureList\"></div><br/>\n    <div id=\"imageFile\"><img alt=\"test image\"/></div><br/>\n    \n    <div></div><br/>\n    \n    <div id=\"videoFile\">\n        <video controls muted> <source src=\"\" type=\"video/mp4\"> </video>\n    </div><br/>\n    <button (click)=\"selectFromDemo()\">select From Demo</button> <br/>\n    "
+            template: "\n    <h5>List Component</h5>\n\n    <div><button (click)=\"mediaCapt('image')\">Media Capture Image</button><br/></div><br/>\n    <div><button (click)=\"mediaCapt('video')\">Media Capture Video</button><br/></div><br/>\n    \n    <div></div><br/>\n    <div id=\"captureList\"></div><br/>\n    <div id=\"imageFile\"><img alt=\"test image\"/></div><br/>\n    \n    <div></div><br/>\n    \n    <div id=\"videoFile\">\n        <video controls muted> <source src=\"\" type=\"video/mp4\"> </video>\n    </div><br/>\n    <button (click)=\"selectFromDemo()\">select From Demo</button> <br/>\n    <router-outlet></router-outlet>\n    "
         }), 
         __metadata('design:paramtypes', [])
     ], ListComponent);

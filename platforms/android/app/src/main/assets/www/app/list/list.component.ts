@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
     <div><button (click)="mediaCapt('video')">Media Capture Video</button><br/></div><br/>
     
     <div></div><br/>
-    <div [innerHTML]="captureList"></div><br/>
+    <div id="captureList"></div><br/>
     <div id="imageFile"><img alt="test image"/></div><br/>
     
     <div></div><br/>
@@ -16,6 +16,7 @@ import { Component } from '@angular/core';
         <video controls muted> <source src="" type="video/mp4"> </video>
     </div><br/>
     <button (click)="selectFromDemo()">select From Demo</button> <br/>
+    <router-outlet></router-outlet>
     `
 })
 
@@ -41,17 +42,14 @@ import { Component } from '@angular/core';
 */
 
 export class ListComponent {
+    
     database = null;
-    captureList = "";
     constructor(){
+        //this.showList = this.showList.bind(this);
         this.initDatabase();
-        this.captureList += '<ul><li><h3> hello!! </h3></li></ul>';
-        //this.showList(this.captureList,this.database);
+        this.showList(this.database);
     }
 
-    // displayImage(imgUri) {
-    //     document.getElementById("imageFile").getElementsByTagName("img")[0].src = imgUri ;
-    // }
     displayVideo(fullPath) {
         document.getElementById("videoFile").getElementsByTagName("video")[0].src = fullPath ;
     }
@@ -59,56 +57,57 @@ export class ListComponent {
     mediaCapt(selection){
         //var func = this.displayImage;
         var funcVid = this.displayVideo;
-        var funcVid1 = this.addRecords;
-        var funcVid2 = this.showList;
+        var funcAddRecords = this.addRecords;
+        var funcShowList = this.showList;
         var db = this.database;
-        var cl = this.captureList;
 
         if (selection == "image"){
             navigator.device.capture.captureImage(function captureSuccess(mediaFiles) {
-                        var i, path, len, name;
+                        var i, len;
                         for (i = 0, len = mediaFiles.length; i < len; i += 1) {
-                            path = mediaFiles[i].fullPath;
-                            name = mediaFiles[i].name;
-                            funcVid1(mediaFiles[i], 'video', false, db);
-                            //funcVid2(cl, db);
-                            // do something interesting with the file
-                        } 
+                            funcAddRecords(mediaFiles[i], 'image', false, db);
+                        }
+                        funcShowList(db);
             },
             function captureError(error){
                 console.debug("Unable to obtain picture: " + error, "app");
-            },{limit:1});
-            // this limit is deliberately set to one to test single record insert
+            },{limit:2});
+            // this limit is deliberately set to 2 to test single record insert
         }
     
         if (selection == "video"){
             navigator.device.capture.captureVideo(function captureSuccess(mediaFiles){
-                console.debug("test mediaFiles: " + mediaFiles[0].fullPath, " app");
-                funcVid(mediaFiles[0].fullPath);
+                //console.debug("test mediaFiles: " + mediaFiles[0].fullPath, " app");
+                //funcVid(mediaFiles[0].fullPath);
+                var i, len;
+                for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+                    funcAddRecords(mediaFiles[i], 'video', false, db);
+                }
+                funcShowList(db);
             },
             function captureError(error){
                 console.debug("Unable to obtain picture: " + error, "app");
-            },{limit:1});
+            },{limit:2});
         }
     }
 
     // database helper
     initDatabase() {
-    this.database = window.sqlitePlugin.openDatabase({name: 'sample.db', location: 'default'
-                            , androidDatabaseImplementation: 2});
+        this.database = window.sqlitePlugin.openDatabase({name: 'sample.db', location: 'default'
+                                , androidDatabaseImplementation: 2});
 
-    this.database.transaction(function(transaction) {
-        transaction.executeSql('CREATE TABLE MediaList (name, path, type, upload)');
-    });
-
-    // showCount
-    this.database.transaction(function(transaction) {
-        transaction.executeSql('SELECT count(*) AS recordCount FROM MediaList', [], function(ignored, resultSet) {
-            console.debug('RECORD COUNT: ' + resultSet.rows.item(0).recordCount);
+        this.database.transaction(function(transaction) {
+            transaction.executeSql('CREATE TABLE MediaList (name, path, type, upload)');
         });
-    }, function(error) {
-        console.debug('SELECT count error: ' + error);
-    });
+
+        // showCount
+        this.database.transaction(function(transaction) {
+            transaction.executeSql('SELECT count(*) AS recordCount FROM MediaList', [], function(ignored, resultSet) {
+                console.debug('RECORD COUNT: ' + resultSet.rows.item(0).recordCount);
+            });
+        }, function(error) {
+            console.debug('SELECT count error: ' + error);
+        });
     }
 
     // Using recommended API calls
@@ -154,20 +153,24 @@ export class ListComponent {
           });
     }
 
-    showList(cl, db){
+    showList(db){
+        var cl = "";
         db.executeSql('SELECT * FROM MediaList', [], function(rs) {
             cl += "<ul>";
-            cl += '<li><h3> hello!! </h3></li>';
-            // for(let i=0; i<rs.rows.length; i++){
-            //     cl += '<li>< h3 > ' + rs.rows.item(i).name + ' < /h3></li>';
-            //     // cl += '<li><div> Record ' + i + ' => name: ' + rs.rows.item(i).name 
-            //     // + ' path: ' + rs.rows.item(i).path + ' type: ' + rs.rows.item(i).type
-            //     // + ' upload: ' + rs.rows.item(i).upload + '</div></li>';
-            // }
+            for(let i=0; i<rs.rows.length; i++){
+                // cl += '<li><h3>' + rs.rows.item(i).name + '</h3></li>';
+                /*cl += '<li><div> Record ' + i + ' => name: ' + rs.rows.item(i).name 
+                + ' path: ' + rs.rows.item(i).path + ' type: ' + rs.rows.item(i).type
+                + ' upload: ' + rs.rows.item(i).upload + '</div></li>';*/
+                cl += '<li><div>' + rs.rows.item(i).name 
+                + ' [' + rs.rows.item(i).type + ']';
+                // cl += '<a [routerLink]="[\'database\']"> | View</a>' + '</div></li>';
+                cl += '<a routerLink="/database" routerLinkActive="active"> | View</a>' + '</div></li>';
+            }
             cl += '</ul>';
+            document.getElementById("captureList").innerHTML = cl;
           }, function(error) {
             console.log('SELECT SQL statement ERROR: ' + error.message);
           });
-          return cl;
     }
 }
