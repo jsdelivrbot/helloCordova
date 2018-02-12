@@ -10,11 +10,13 @@ import { AboutComponent } from './about/about.component';
 import { DeviceComponent } from './device/device.component';
 import { DatabaseComponent } from './database/database.component';
 import { ListComponent } from './list/list.component';
+import { MediaModule } from './media/media.module';
 
 @NgModule({
     imports: [
         routing,
-        BrowserModule
+        BrowserModule,
+        MediaModule
     ],
     declarations: [
         AppComponent,
