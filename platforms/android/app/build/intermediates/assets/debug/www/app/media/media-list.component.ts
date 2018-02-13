@@ -8,6 +8,7 @@ import { Media, MediaService }  from './media.service';
 @Component({
   template: `
     <h2>Media List</h2>
+    <div><button (click)="reTest()">Load Data</button><br/></div><br/>
     <ul class="items">
       <li *ngFor="let media of mediaList$ | async"
         [class.selected]="media.id === selectedId">
@@ -39,5 +40,9 @@ export class MediaListComponent implements OnInit {
     //     this.selectedId = +params.get('id');
     //     return this.service.getMediaItems();
     //   });
+  }
+
+  reTest(){
+    this.mediaList$ = this.service.getMediaItems();
   }
 }

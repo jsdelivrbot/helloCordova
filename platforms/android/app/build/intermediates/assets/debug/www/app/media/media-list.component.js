@@ -24,9 +24,12 @@ var MediaListComponent = (function () {
             _this.mediaList$ = _this.service.getMediaItems();
         });
     };
+    MediaListComponent.prototype.reTest = function () {
+        this.mediaList$ = this.service.getMediaItems();
+    };
     MediaListComponent = __decorate([
         core_1.Component({
-            template: "\n    <h2>Media List</h2>\n    <ul class=\"items\">\n      <li *ngFor=\"let media of mediaList$ | async\"\n        [class.selected]=\"media.id === selectedId\">\n        <a [routerLink]=\"['/media', media.id]\">\n          <span class=\"badge\">{{ media.id }}</span>{{ media.name }}\n        </a>\n      </li>\n    </ul>\n  "
+            template: "\n    <h2>Media List</h2>\n    <div><button (click)=\"reTest()\">Load Data</button><br/></div><br/>\n    <ul class=\"items\">\n      <li *ngFor=\"let media of mediaList$ | async\"\n        [class.selected]=\"media.id === selectedId\">\n        <a [routerLink]=\"['/media', media.id]\">\n          <span class=\"badge\">{{ media.id }}</span>{{ media.name }}\n        </a>\n      </li>\n    </ul>\n  "
         }), 
         __metadata('design:paramtypes', [media_service_1.MediaService, router_1.ActivatedRoute])
     ], MediaListComponent);
