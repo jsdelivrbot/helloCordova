@@ -13,21 +13,16 @@ require('rxjs/add/operator/map');
 var core_1 = require('@angular/core');
 var Observable_1 = require('rxjs/Observable');
 var Media = (function () {
-    function Media(id, name) {
+    function Media(id, name, path, type, upload) {
         this.id = id;
         this.name = name;
+        this.path = path;
+        this.type = type;
+        this.upload = upload;
     }
     return Media;
 }());
 exports.Media = Media;
-var MEDIAITEMS = [
-    new Media(11, 'Mr. Nice'),
-    new Media(12, 'Narco'),
-    new Media(13, 'Bombasto'),
-    new Media(14, 'Celeritas'),
-    new Media(15, 'Magneta'),
-    new Media(16, 'RubberMan')
-];
 var MediaItemsList = [];
 var MediaService = (function () {
     function MediaService() {
@@ -52,9 +47,9 @@ var MediaService = (function () {
     };
     MediaService.prototype.getMediaItemsDemo = function (db) {
         var that = this;
-        db.executeSql('SELECT rowid, name FROM MediaList', [], function (rs) {
+        db.executeSql('SELECT rowid, name, path, type, upload FROM MediaList', [], function (rs) {
             for (var i = 0; i < rs.rows.length; i++) {
-                MediaItemsList.push(new Media(rs.rows.item(i).rowid, rs.rows.item(i).name));
+                MediaItemsList.push(new Media(rs.rows.item(i).rowid, rs.rows.item(i).name, rs.rows.item(i).path, rs.rows.item(i).type, rs.rows.item(i).upload));
             }
         }, function (error) {
             console.log('SELECT SQL statement ERROR: ' + error.message);

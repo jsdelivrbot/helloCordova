@@ -4,17 +4,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 export class Media {
-  constructor(public id: number, public name: string) { }
+  constructor(public id: number, public name: string, 
+    public path: string, public type: string, public upload: boolean) { }
 }
-
-const MEDIAITEMS = [
-  new Media(11, 'Mr. Nice'),
-  new Media(12, 'Narco'),
-  new Media(13, 'Bombasto'),
-  new Media(14, 'Celeritas'),
-  new Media(15, 'Magneta'),
-  new Media(16, 'RubberMan')
-];
 
 var MediaItemsList: Media[] = [];
 
@@ -48,9 +40,10 @@ export class MediaService {
 
   getMediaItemsDemo(db){
     var that = this;
-    db.executeSql('SELECT rowid, name FROM MediaList', [], function(rs) {
+    db.executeSql('SELECT rowid, name, path, type, upload FROM MediaList', [], function(rs) {
         for(let i=0; i<rs.rows.length; i++){
-          MediaItemsList.push(new Media(rs.rows.item(i).rowid,rs.rows.item(i).name));
+          MediaItemsList.push(new Media(rs.rows.item(i).rowid, rs.rows.item(i).name, 
+            rs.rows.item(i).path, rs.rows.item(i).type, rs.rows.item(i).upload));
         }
       }, function(error) {
         console.log('SELECT SQL statement ERROR: ' + error.message);

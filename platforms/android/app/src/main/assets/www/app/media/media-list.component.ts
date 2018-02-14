@@ -7,16 +7,28 @@ import { Media, MediaService }  from './media.service';
 
 @Component({
   template: `
-    <h2>Media List</h2>
-    <div><button (click)="reTest()">Load Data</button><br/></div><br/>
-    <ul class="items">
-      <li *ngFor="let media of mediaList$ | async"
-        [class.selected]="media.id === selectedId">
+  <h2>Media List</h2>
+  <div><button (click)="reloadData()">Load Data</button><br/></div><br/>
+  <h3>List of Images</h3>
+  <div *ngFor="let media of mediaList$ | async" [class.selected]="media.id === selectedId">
+    <ul class="itemsImage" *ngIf="media.type === 'image'">
+      <li>
         <a [routerLink]="['/media', media.id]">
           <span class="badge">{{ media.id }}</span>{{ media.name }}
         </a>
       </li>
     </ul>
+  </div>
+  <h3>List of Videos</h3>
+  <div *ngFor="let media of mediaList$ | async" [class.selected]="media.id === selectedId">
+    <ul class="itemsVideo" *ngIf="media.type === 'video'">
+      <li>
+        <a [routerLink]="['/media', media.id]">
+          <span class="badge">{{ media.id }}</span>{{ media.name }}
+        </a>
+      </li>
+    </ul>
+  </div>
   `
 })
 export class MediaListComponent implements OnInit {
@@ -34,15 +46,9 @@ export class MediaListComponent implements OnInit {
       this.selectedId = params['id'];
       this.mediaList$ = this.service.getMediaItems();
     });
-    // this.mediaList$ = this.route.paramMap
-    //   .switchMap((params: ParamMap) => {
-    //     // (+) before `params.get()` turns the string into a number
-    //     this.selectedId = +params.get('id');
-    //     return this.service.getMediaItems();
-    //   });
   }
 
-  reTest(){
+  reloadData(){
     this.mediaList$ = this.service.getMediaItems();
   }
 }
