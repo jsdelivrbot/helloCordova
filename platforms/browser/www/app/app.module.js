@@ -16,6 +16,9 @@ var app_routing_1 = require('./app.routing');
 var app_component_1 = require('./app.component');
 var about_component_1 = require('./about/about.component');
 var device_component_1 = require('./device/device.component');
+var database_component_1 = require('./database/database.component');
+var list_component_1 = require('./list/list.component');
+var media_module_1 = require('./media/media.module');
 var AppModule = (function () {
     function AppModule() {
     }
@@ -23,12 +26,15 @@ var AppModule = (function () {
         core_1.NgModule({
             imports: [
                 app_routing_1.routing,
-                platform_browser_1.BrowserModule
+                platform_browser_1.BrowserModule,
+                media_module_1.MediaModule
             ],
             declarations: [
                 app_component_1.AppComponent,
                 about_component_1.AboutComponent,
-                device_component_1.DeviceComponent
+                device_component_1.DeviceComponent,
+                database_component_1.DatabaseComponent,
+                list_component_1.ListComponent
             ],
             bootstrap: [app_component_1.AppComponent]
         }), 

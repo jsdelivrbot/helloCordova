@@ -298,6 +298,30 @@ module.exports = [
         "clobbers": [
             "SQLitePlugin"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-file-transfer/www/FileTransferError.js",
+        "id": "cordova-plugin-file-transfer.FileTransferError",
+        "pluginId": "cordova-plugin-file-transfer",
+        "clobbers": [
+            "window.FileTransferError"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-file-transfer/www/FileTransfer.js",
+        "id": "cordova-plugin-file-transfer.FileTransfer",
+        "pluginId": "cordova-plugin-file-transfer",
+        "clobbers": [
+            "window.FileTransfer"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-file-transfer/www/browser/FileTransfer.js",
+        "id": "cordova-plugin-file-transfer.BrowserFileTransfer",
+        "pluginId": "cordova-plugin-file-transfer",
+        "clobbers": [
+            "window.FileTransfer"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -308,7 +332,8 @@ module.exports.metadata =
     "cordova-plugin-camera": "4.0.1",
     "cordova-plugin-file": "6.0.1",
     "cordova-plugin-media-capture": "3.0.1",
-    "cordova-sqlite-storage": "2.2.0"
+    "cordova-sqlite-storage": "2.2.0",
+    "cordova-plugin-file-transfer": "1.7.1"
 }
 // BOTTOM OF METADATA
 });
