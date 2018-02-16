@@ -48,14 +48,26 @@ var MediaService = (function () {
     MediaService.prototype.getMediaItemsDemo = function (db) {
         var that = this;
         db.executeSql('SELECT rowid, name, path, type, upload FROM MediaList', [], function (rs) {
+            var _loop_1 = function(i) {
+                items = MediaItemsList.filter(function (item) {
+                    if (item.id == rs.rows.item(i).rowid) {
+                        return item;
+                    }
+                });
+                if (items.length == 0) {
+                    MediaItemsList.push(new Media(rs.rows.item(i).rowid, rs.rows.item(i).name, rs.rows.item(i).path, rs.rows.item(i).type, rs.rows.item(i).upload));
+                }
+            };
+            var items;
             for (var i = 0; i < rs.rows.length; i++) {
-                MediaItemsList.push(new Media(rs.rows.item(i).rowid, rs.rows.item(i).name, rs.rows.item(i).path, rs.rows.item(i).type, rs.rows.item(i).upload));
+                _loop_1(i);
             }
         }, function (error) {
             console.log('SELECT SQL statement ERROR: ' + error.message);
         });
     };
     MediaService.prototype.getMediaItems = function () {
+        this.getMediaItemsDemo(this.database);
         return Observable_1.Observable.of(MediaItemsList);
     };
     MediaService.prototype.getMedia = function (id) {

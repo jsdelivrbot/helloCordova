@@ -42,8 +42,13 @@ export class MediaService {
     var that = this;
     db.executeSql('SELECT rowid, name, path, type, upload FROM MediaList', [], function(rs) {
         for(let i=0; i<rs.rows.length; i++){
-          MediaItemsList.push(new Media(rs.rows.item(i).rowid, rs.rows.item(i).name, 
-            rs.rows.item(i).path, rs.rows.item(i).type, rs.rows.item(i).upload));
+          var items = MediaItemsList.filter((item)=> {
+                if (item.id == rs.rows.item(i).rowid)
+                {return item;}});
+          if (items.length == 0){
+            MediaItemsList.push(new Media(rs.rows.item(i).rowid, rs.rows.item(i).name, 
+              rs.rows.item(i).path, rs.rows.item(i).type, rs.rows.item(i).upload));
+          }
         }
       }, function(error) {
         console.log('SELECT SQL statement ERROR: ' + error.message);
@@ -51,7 +56,13 @@ export class MediaService {
   }
 
   getMediaItems() { 
-    // return Observable.of(MEDIAITEMS); 
+    this.getMediaItemsDemo(this.database);
+    
+    // console.log(MediaItemsList.filter((item)=> {
+    //   if(item.id == 3)
+    //     return item;
+    // }));
+
     return Observable.of(MediaItemsList); 
   }
 
