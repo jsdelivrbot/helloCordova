@@ -32,8 +32,10 @@ var MediaService = (function () {
         this.getMediaItemsDemo(this.database);
     }
     MediaService.prototype.initDatabase = function () {
-        this.database = window.sqlitePlugin.openDatabase({ name: 'sample.db', location: 'default',
-            androidDatabaseImplementation: 2 });
+        this.database = window.sqlitePlugin.openDatabase({
+            name: 'sample.db', location: 'default',
+            androidDatabaseImplementation: 2
+        });
         this.database.transaction(function (transaction) {
             transaction.executeSql('CREATE TABLE MediaList (name, path, type, upload)');
         });
@@ -71,8 +73,7 @@ var MediaService = (function () {
         return Observable_1.Observable.of(MediaItemsList);
     };
     MediaService.prototype.getMedia = function (id) {
-        return this.getMediaItems()
-            .map(function (mediaItems) { return mediaItems.find(function (media) { return media.id === +id; }); });
+        return MediaItemsList.filter(function (media) { return media.id == id; })[0];
     };
     MediaService = __decorate([
         core_1.Injectable(), 

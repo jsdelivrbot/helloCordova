@@ -1,26 +1,26 @@
 import { Component } from '@angular/core';
 @Component({
     template: `
-    <h5>List Component</h5>
-
+    <h5>Capture Options</h5>
     <div><button (click)="mediaCapt('image')">Media Capture Image</button><br/></div><br/>
     <div><button (click)="mediaCapt('video')">Media Capture Video</button><br/></div><br/>
-    
     <div></div><br/>
+    <h4>All Media List</h4>
     <div id="captureList"></div><br/>
-    <div id="imageFile"><img alt="test image"/></div><br/>
-    
-    <div></div><br/>
-    
-    <div id="videoFile">
-        <video controls muted> <source src="" type="video/mp4"> </video>
-    </div><br/>
-    <button (click)="selectFromDemo()">select From Demo</button> <br/>
     <router-outlet></router-outlet>
     `
 })
 
 /*
+-------- working lines --------
+<div id="imageFile"><img alt="test image"/></div><br/>
+    <div></div><br/>
+    <div id="videoFile">
+        <video controls muted> <source src="" type="video/mp4"> </video>
+    </div><br/>
+    <button (click)="selectFromDemo()">select From Demo</button> <br/>
+
+-------- code while trying different things --------
 <video width="320" height="240" controls muted>
 <video class="video_player" id="player" width="100%" controls="controls" autoplay="autoplay">
 <button onclick="goFullscreen('player'); return false">Fullscreen!</button>
@@ -158,14 +158,14 @@ export class ListComponent {
         db.executeSql('SELECT * FROM MediaList', [], function(rs) {
             cl += "<ul>";
             for(let i=0; i<rs.rows.length; i++){
-                // cl += '<li><h3>' + rs.rows.item(i).name + '</h3></li>';
+                cl += '<li>' + rs.rows.item(i).name + '</li>';
                 /*cl += '<li><div> Record ' + i + ' => name: ' + rs.rows.item(i).name 
                 + ' path: ' + rs.rows.item(i).path + ' type: ' + rs.rows.item(i).type
                 + ' upload: ' + rs.rows.item(i).upload + '</div></li>';*/
-                cl += '<li><div>' + rs.rows.item(i).name 
-                + ' [' + rs.rows.item(i).type + ']';
+                // cl += '<li><div>' + rs.rows.item(i).name + ' [' + rs.rows.item(i).type + ']';
+
                 // cl += '<a [routerLink]="[\'database\']"> | View</a>' + '</div></li>';
-                cl += '<a routerLink="/database" routerLinkActive="active"> | View</a>' + '</div></li>';
+                // cl += '<a routerLink="/database" routerLinkActive="active"> | View</a>' + '</div></li>';
             }
             cl += '</ul>';
             document.getElementById("captureList").innerHTML = cl;

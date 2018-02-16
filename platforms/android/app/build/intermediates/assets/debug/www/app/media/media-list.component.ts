@@ -9,7 +9,7 @@ import { Media, MediaService }  from './media.service';
   template: `
   <h2>Media List</h2>
   <div><button (click)="reloadData()">Load Data</button><br/></div><br/>
-  <h3>List of Images</h3>
+  <h3>Images</h3>
   <div *ngFor="let media of mediaList$ | async" [class.selected]="media.id === selectedId">
     <ul class="itemsImage" *ngIf="media.type === 'image'">
       <li>
@@ -19,7 +19,7 @@ import { Media, MediaService }  from './media.service';
       </li>
     </ul>
   </div>
-  <h3>List of Videos</h3>
+  <h3>Videos</h3>
   <div *ngFor="let media of mediaList$ | async" [class.selected]="media.id === selectedId">
     <ul class="itemsVideo" *ngIf="media.type === 'video'">
       <li>

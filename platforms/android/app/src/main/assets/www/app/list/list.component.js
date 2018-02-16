@@ -92,9 +92,7 @@ var ListComponent = (function () {
         db.executeSql('SELECT * FROM MediaList', [], function (rs) {
             cl += "<ul>";
             for (var i = 0; i < rs.rows.length; i++) {
-                cl += '<li><div>' + rs.rows.item(i).name
-                    + ' [' + rs.rows.item(i).type + ']';
-                cl += '<a routerLink="/database" routerLinkActive="active"> | View</a>' + '</div></li>';
+                cl += '<li>' + rs.rows.item(i).name + '</li>';
             }
             cl += '</ul>';
             document.getElementById("captureList").innerHTML = cl;
@@ -104,7 +102,7 @@ var ListComponent = (function () {
     };
     ListComponent = __decorate([
         core_1.Component({
-            template: "\n    <h5>List Component</h5>\n\n    <div><button (click)=\"mediaCapt('image')\">Media Capture Image</button><br/></div><br/>\n    <div><button (click)=\"mediaCapt('video')\">Media Capture Video</button><br/></div><br/>\n    \n    <div></div><br/>\n    <div id=\"captureList\"></div><br/>\n    <div id=\"imageFile\"><img alt=\"test image\"/></div><br/>\n    \n    <div></div><br/>\n    \n    <div id=\"videoFile\">\n        <video controls muted> <source src=\"\" type=\"video/mp4\"> </video>\n    </div><br/>\n    <button (click)=\"selectFromDemo()\">select From Demo</button> <br/>\n    <router-outlet></router-outlet>\n    "
+            template: "\n    <h5>Capture Options</h5>\n    <div><button (click)=\"mediaCapt('image')\">Media Capture Image</button><br/></div><br/>\n    <div><button (click)=\"mediaCapt('video')\">Media Capture Video</button><br/></div><br/>\n    <div></div><br/>\n    <h4>All Media List</h4>\n    <div id=\"captureList\"></div><br/>\n    <router-outlet></router-outlet>\n    "
         }), 
         __metadata('design:paramtypes', [])
     ], ListComponent);
