@@ -4,12 +4,13 @@ import { Observable } from 'rxjs/Observable';
 import { Router, ActivatedRoute } from '@angular/router';
 //import { slideInDownAnimation } from '../animations';
 
-import { Media, MediaService }  from './media.service';
+import { Media, MediaService } from './media.service';
 
 @Component({
   template: `
   <h2>Media Detail</h2>
   <div *ngIf="media$">
+    <button (click)="uploadFile(media$)">Upload File</button>
     <h3>{{ media$.name }}</h3>
     <div id="imageFile" *ngIf="media$.type === 'image'">
       <img src="{{ media$.path }}" alt="Image Unavailable" width="250"/>
@@ -22,7 +23,7 @@ import { Media, MediaService }  from './media.service';
     </p>
   </div>
   `
-}) 
+})
 /* 
   <div *ngIf="media$ | async"> 
   
@@ -32,10 +33,11 @@ import { Media, MediaService }  from './media.service';
   <div><label>Name: </label>{{ media$.name }}</div>
   <div><label>Path: </label>{{ media$.path }}</div>
 */
+
 export class MediaDetailComponent implements OnInit {
   //@HostBinding('@routeAnimation') routeAnimation = true;
-  @HostBinding('style.display')   display = 'block';
-  @HostBinding('style.position')  position = 'absolute';
+  @HostBinding('style.display') display = 'block';
+  @HostBinding('style.position') position = 'absolute';
 
   // media$: Observable<Media>;
   media$: Media;
@@ -44,12 +46,12 @@ export class MediaDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private service: MediaService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.media$ = this.service.getMedia(params['id']);
-    
+
     });
 
     // this.media$ = this.route.paramMap
@@ -68,4 +70,8 @@ export class MediaDetailComponent implements OnInit {
   // reloadData(){
   //   this.media$ = this.service.getMedia(this.route.params['id']);
   // }
+
+  uploadFile(media: Media) {
+    //this.service.uploadFile(media);
+  }
 }
