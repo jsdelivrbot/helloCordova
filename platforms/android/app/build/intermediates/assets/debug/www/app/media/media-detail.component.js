@@ -31,6 +31,12 @@ var MediaDetailComponent = (function () {
         this.router.navigate(['/media', { id: mediaId, foo: 'foo' }]);
     };
     MediaDetailComponent.prototype.uploadFile = function (media) {
+        var ft = new FileTransfer();
+        ft.upload(media.path, "http://192.168.0.32/hybridTest/upload.php", function (result) {
+            console.log(JSON.stringify(result));
+        }, function (error) {
+            console.log(JSON.stringify(error));
+        });
     };
     __decorate([
         core_1.HostBinding('style.display'), 
@@ -42,7 +48,7 @@ var MediaDetailComponent = (function () {
     ], MediaDetailComponent.prototype, "position", void 0);
     MediaDetailComponent = __decorate([
         core_1.Component({
-            template: "\n  <h2>Media Detail</h2>\n  <div *ngIf=\"media$\">\n    <button (click)=\"uploadFile(media$)\">Upload File</button>\n    <h3>{{ media$.name }}</h3>\n    <div id=\"imageFile\" *ngIf=\"media$.type === 'image'\">\n      <img src=\"{{ media$.path }}\" alt=\"Image Unavailable\" width=\"250\"/>\n    </div>\n    <div id=\"videoFile\" *ngIf=\"media$.type === 'video'\">\n      <video width=\"225\" controls><source src=\"{{ media$.path }}\" type=\"video/mp4\"></video>\n    </div>\n    <p>\n      <button (click)=\"gotoMediaList(media$)\">Back</button>\n    </p>\n  </div>\n  "
+            template: "\n    <h2>Media Detail</h2>\n    <div *ngIf=\"media$\">\n      <button (click)=\"uploadFile(media$)\">Upload File</button>\n      <h3>{{ media$.name }}</h3>\n      <div id=\"imageFile\" *ngIf=\"media$.type === 'image'\">\n        <img src=\"{{ media$.path }}\" alt=\"Image Unavailable\" width=\"250\"/>\n      </div>\n      <div id=\"videoFile\" *ngIf=\"media$.type === 'video'\">\n        <video width=\"225\" controls><source src=\"{{ media$.path }}\" type=\"video/mp4\"></video>\n      </div>\n      <p>\n        <button (click)=\"gotoMediaList(media$)\">Back</button>\n      </p>\n    </div>\n    "
         }), 
         __metadata('design:paramtypes', [router_1.ActivatedRoute, router_1.Router, media_service_1.MediaService])
     ], MediaDetailComponent);

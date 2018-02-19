@@ -8,21 +8,21 @@ import { Media, MediaService } from './media.service';
 
 @Component({
   template: `
-  <h2>Media Detail</h2>
-  <div *ngIf="media$">
-    <button (click)="uploadFile(media$)">Upload File</button>
-    <h3>{{ media$.name }}</h3>
-    <div id="imageFile" *ngIf="media$.type === 'image'">
-      <img src="{{ media$.path }}" alt="Image Unavailable" width="250"/>
+    <h2>Media Detail</h2>
+    <div *ngIf="media$">
+      <button (click)="uploadFile(media$)">Upload File</button>
+      <h3>{{ media$.name }}</h3>
+      <div id="imageFile" *ngIf="media$.type === 'image'">
+        <img src="{{ media$.path }}" alt="Image Unavailable" width="250"/>
+      </div>
+      <div id="videoFile" *ngIf="media$.type === 'video'">
+        <video width="225" controls><source src="{{ media$.path }}" type="video/mp4"></video>
+      </div>
+      <p>
+        <button (click)="gotoMediaList(media$)">Back</button>
+      </p>
     </div>
-    <div id="videoFile" *ngIf="media$.type === 'video'">
-      <video width="225" controls><source src="{{ media$.path }}" type="video/mp4"></video>
-    </div>
-    <p>
-      <button (click)="gotoMediaList(media$)">Back</button>
-    </p>
-  </div>
-  `
+    `
 })
 /* 
   <div *ngIf="media$ | async"> 
@@ -72,6 +72,11 @@ export class MediaDetailComponent implements OnInit {
   // }
 
   uploadFile(media: Media) {
-    //this.service.uploadFile(media);
+    var ft = new FileTransfer();
+    ft.upload(media.path, "http://192.168.0.32/hybridTest/upload.php", function (result) {
+      console.log(JSON.stringify(result));
+    }, function (error) {
+      console.log(JSON.stringify(error));
+    });
   }
 }
