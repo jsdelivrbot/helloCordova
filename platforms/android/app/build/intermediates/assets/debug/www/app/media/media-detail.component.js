@@ -32,7 +32,7 @@ var MediaDetailComponent = (function () {
     };
     MediaDetailComponent.prototype.uploadFile = function (media) {
         var ft = new FileTransfer();
-        ft.upload(media.path, "http://192.168.0.32/hybridTest/upload.php", function (result) {
+        ft.upload(media.path, "http://192.168.0.32/hybridTest/upload.php?name=" + media.name, function (result) {
             console.log(JSON.stringify(result));
         }, function (error) {
             console.log(JSON.stringify(error));
